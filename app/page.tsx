@@ -38,7 +38,7 @@ export default function Home() {
 		  <div className="max-w-md mx-auto">
 			<h1 className="text-2xl font-semibold mb-6">Customer Support Email Generator</h1>
 			<textarea
-			  className="w-full px-3 py-2 !text-gray-900 bg-white border rounded-lg focus:outline-none"
+			  className="w-full px-3 py-2 border rounded-lg focus:outline-none custom-textarea"
 			  rows={4}
 			  value={input}
 			  onChange={(e) => setInput(e.target.value)}

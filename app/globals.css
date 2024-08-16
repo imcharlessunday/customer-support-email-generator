@@ -31,3 +31,9 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Textarea styles */
+.custom-textarea {
+  color: #1a202c !important;
+  background-color: white !important;
+}
