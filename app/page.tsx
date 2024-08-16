@@ -1,13 +1,5 @@
-'use client'
-
 import { useState } from 'react'
 import { HfInference } from '@huggingface/inference'
-
-// Metadata for the page
-export const metadata = {
-  title: 'Customer Support Email Generator',
-  description: 'Generate professional customer support emails quickly and easily.',
-}
 
 // Initialize Hugging Face inference (make sure to set up your .env.local file)
 const hf = new HfInference(process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY)
