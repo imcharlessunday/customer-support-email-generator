@@ -14,36 +14,48 @@ export default function Home() {
 	const generateResponse = async () => {
 		setLoading(true)
 		try {
-			const prompt = `Generate a polite customer support email for: "${input}"
-			Include: 1. Greeting 2. Acknowledge issue 3. Solution/steps 4. Offer help 5. Professional sign-off
-			Email:`
+		const prompt = `Write a professional customer support email for the following issue:
+		"${input}"
 
-			const result = await hf.textGeneration({
-				model: 'gpt2-large',
-				inputs: prompt,
-				parameters: {
-					max_length: 350,
-					temperature: 0.7,
-					top_k: 50,
-					top_p: 0.95,
-				},
-			})
-		
-			let processedResponse = result.generated_text.replace(prompt, '').trim()
-			if (!processedResponse.toLowerCase().startsWith('dear') && !processedResponse.toLowerCase().startsWith('hello')) {
-			  processedResponse = `Dear Valued Customer,\n\n${processedResponse}`
-			}
-			if (!processedResponse.toLowerCase().includes('sincerely') && !processedResponse.toLowerCase().includes('best regards')) {
-			  processedResponse += '\n\nBest regards,\nCustomer Support Team'
-			}
-		
-			setResponse(processedResponse)
-		} catch (error) {
-			console.error('Error generating response:', error)
-			setResponse('An error occurred while generating the response. Please try again.')
+		Include:
+		1. A polite greeting
+		2. Acknowledgment of the issue
+		3. Step-by-step instructions to resolve the problem
+		4. Offer for further assistance
+		5. Professional sign-off
+
+		Do not include placeholder text or URLs. Provide specific, helpful information.`;
+
+		const result = await hf.textGeneration({
+		  model: 'gpt2-large',
+		  inputs: prompt,
+		  parameters: {
+		    max_length: 350,
+		    temperature: 0.7,
+		    top_k: 50,
+		    top_p: 0.95,
+		  },
+		});
+
+		let processedResponse = result.generated_text.replace(prompt, '').trim();
+		processedResponse = processedResponse.replace(/^[^A-Za-z]+/, ''); // Remove non-letter characters at start
+		processedResponse = processedResponse.split('\n').map(line => line.trim()).join('\n'); // Trim each line
+
+		if (!processedResponse.toLowerCase().startsWith('dear') && !processedResponse.toLowerCase().startsWith('hello')) {
+		  processedResponse = `Dear Valued Customer,\n\n${processedResponse}`;
 		}
-		setLoading(false)
-	}
+
+		if (!processedResponse.toLowerCase().includes('sincerely') && !processedResponse.toLowerCase().includes('best regards')) {
+		  processedResponse += '\n\nBest regards,\nCustomer Support Team';
+		}
+
+		setResponse(processedResponse);
+		} catch (error) {
+			console.error('Error generating response:', error);
+			setResponse('An error occurred while generating the response. Please try again.');
+		}
+		setLoading(false);
+	};
 
 	return (
 		<main className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
