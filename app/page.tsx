@@ -121,7 +121,7 @@ Customer Support Team`;
 		<textarea
 		  id="details"
 		  className="w-full p-2 mb-4 border border-gray-300 rounded-md"
-		  rows="4"
+		  rows={4}
 		  value={details}
 		  onChange={(e) => setDetails(e.target.value)}
 		/>
