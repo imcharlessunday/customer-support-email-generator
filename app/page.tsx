@@ -89,7 +89,7 @@ Customer Support Team`;
   };
 
   return (
-	<div className="font-sans text-gray-800 leading-relaxed max-w-[36rem] mx-auto p-6 bg-white rounded-lg shadow-md">
+	<div className="w-full">
 	  <h1 className="text-center text-2xl font-bold text-gray-800">Customer Support Email Generator</h1>
 	  <form id="emailForm" className="bg-white p-5 rounded-lg shadow-lg" onSubmit={(e) => { e.preventDefault(); handleGenerateEmail(); }}>
 		<label htmlFor="customerName" className="block mb-1 font-bold text-gray-700">Customer Name:</label>
