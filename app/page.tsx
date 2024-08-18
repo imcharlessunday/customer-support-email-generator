@@ -25,26 +25,26 @@ export default function Home() {
 	}
 
 	const generateResponse = async () => {
-		setLoading(true)
-		try {
-		const prompt = `Write a professional customer support email for the following issue:
+	  setLoading(true)
+	  try {
+		const prompt = `Write a professional, well-formatted customer support email for this issue:
 		"${input}"
-
+		
 		Include:
-		1. A polite greeting
-		2. Acknowledgment of the issue
-		3. Step-by-step instructions to resolve the problem
-		4. Offer for further assistance
-		5. Professional sign-off
+		1. Greeting: "Dear Valued Customer,"
+		2. Acknowledge the issue
+		3. Provide a clear solution or next steps
+		4. Offer further assistance
+		5. Sign off: "Best regards,\\nCustomer Support Team"
 
-		Do not include placeholder text or URLs. Provide specific, helpful information.`;
+		Ensure proper paragraph spacing and formatting.`;
 
 		const result = await hf.textGeneration({
 		  model: 'gpt2-large',
 		  inputs: prompt,
 		  parameters: {
-			max_length: 350,
-			temperature: 0.7,
+			max_length: 500,
+			temperature: 0.5,
 			top_k: 50,
 			top_p: 0.95,
 		  },
@@ -52,14 +52,14 @@ export default function Home() {
 
 		let processedResponse = result.generated_text.replace(prompt, '').trim();
 		processedResponse = processedResponse.replace(/^[^A-Za-z]+/, '');
-		processedResponse = processedResponse.replace(/\b(printf|Create a customer support page for:).*$/gm, '');
+		processedResponse = processedResponse.replace(/\b(resentCancel|Cancel the request).*$/gm, '');
 		processedResponse = processedResponse.split('\n').map(line => line.trim()).filter(Boolean).join('\n\n');
 		
-		if (!processedResponse.toLowerCase().startsWith('dear') && !processedResponse.toLowerCase().startsWith('hello')) {
+		if (!processedResponse.toLowerCase().startsWith('dear')) {
 		  processedResponse = `Dear Valued Customer,\n\n${processedResponse}`;
 		}
 		
-		if (!processedResponse.toLowerCase().includes('sincerely') && !processedResponse.toLowerCase().includes('best regards')) {
+		if (!processedResponse.toLowerCase().includes('best regards')) {
 		  processedResponse += '\n\nBest regards,\nCustomer Support Team';
 		}
 
