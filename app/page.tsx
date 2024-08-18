@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { HfInference } from '@huggingface/inference'
 
 // Initialize Hugging Face inference (make sure to set up your .env.local file)
@@ -8,8 +8,21 @@ const hf = new HfInference(process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY)
 
 export default function Home() {
 	const [input, setInput] = useState('')
-	const [response, setResponse] = useState('')
+	const [typingResponse, setTypingResponse] = useState('')
 	const [loading, setLoading] = useState(false)
+
+	const typeResponse = (text: string) => {
+	  let i = 0;
+	  setTypingResponse('');
+	  const typingInterval = setInterval(() => {
+		if (i < text.length) {
+		  setTypingResponse(prev => prev + text.charAt(i));
+		  i++;
+		} else {
+		  clearInterval(typingInterval);
+		}
+	  }, 30);
+	}
 
 	const generateResponse = async () => {
 		setLoading(true)
@@ -30,33 +43,33 @@ export default function Home() {
 		  model: 'gpt2-large',
 		  inputs: prompt,
 		  parameters: {
-		    max_length: 350,
-		    temperature: 0.7,
-		    top_k: 50,
-		    top_p: 0.95,
+			max_length: 350,
+			temperature: 0.7,
+			top_k: 50,
+			top_p: 0.95,
 		  },
 		});
 
 		let processedResponse = result.generated_text.replace(prompt, '').trim();
-		processedResponse = processedResponse.replace(/^[^A-Za-z]+/, ''); // Remove non-letter characters at start
-		processedResponse = processedResponse.replace(/\b(printf|Create a customer support page for:).*$/gm, ''); // Remove unwanted phrases
+		processedResponse = processedResponse.replace(/^[^A-Za-z]+/, '');
+		processedResponse = processedResponse.replace(/\b(printf|Create a customer support page for:).*$/gm, '');
 		processedResponse = processedResponse.split('\n').map(line => line.trim()).filter(Boolean).join('\n\n');
-
+		
 		if (!processedResponse.toLowerCase().startsWith('dear') && !processedResponse.toLowerCase().startsWith('hello')) {
 		  processedResponse = `Dear Valued Customer,\n\n${processedResponse}`;
 		}
-
+		
 		if (!processedResponse.toLowerCase().includes('sincerely') && !processedResponse.toLowerCase().includes('best regards')) {
 		  processedResponse += '\n\nBest regards,\nCustomer Support Team';
 		}
 
-		setResponse(processedResponse);
-		} catch (error) {
-			console.error('Error generating response:', error);
-			setResponse('An error occurred while generating the response. Please try again.');
-		}
-		setLoading(false);
-	};
+		typeResponse(processedResponse);
+	  } catch (error) {
+		console.error('Error generating response:', error)
+		setTypingResponse('An error occurred while generating the response. Please try again.')
+	  }
+	  setLoading(false)
+	}
 
 	return (
 		<main className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
@@ -79,11 +92,11 @@ export default function Home() {
 				>
 				  {loading ? 'Generating...' : 'Generate Response'}
 				</button>
-				{response && (
-				  <div className="mt-6">
-					<h2 className="text-lg font-semibold mb-2">Generated Response:</h2>
-					<p className="text-gray-700 whitespace-pre-wrap">{response}</p>
-				  </div>
+				{typingResponse && (
+  					<div className="mt-6">
+						<h2 className="text-lg font-semibold mb-2">Generated Response:</h2>
+						<p className="text-gray-700 whitespace-pre-wrap">{typingResponse}</p>
+					</div>
 				)}
 			  </div>
 			</div>
