@@ -39,7 +39,8 @@ export default function Home() {
 
 		let processedResponse = result.generated_text.replace(prompt, '').trim();
 		processedResponse = processedResponse.replace(/^[^A-Za-z]+/, ''); // Remove non-letter characters at start
-		processedResponse = processedResponse.split('\n').map(line => line.trim()).join('\n'); // Trim each line
+		processedResponse = processedResponse.replace(/\b(printf|Create a customer support page for:).*$/gm, ''); // Remove unwanted phrases
+		processedResponse = processedResponse.split('\n').map(line => line.trim()).filter(Boolean).join('\n\n');
 
 		if (!processedResponse.toLowerCase().startsWith('dear') && !processedResponse.toLowerCase().startsWith('hello')) {
 		  processedResponse = `Dear Valued Customer,\n\n${processedResponse}`;
