@@ -14,46 +14,36 @@ export default function Home() {
 	const generateResponse = async () => {
 		setLoading(true)
 		try {
-			const prompt = `
-			Generate a polite and helpful customer support email for the following issue:
-			"${input}"
-
-			The email should:
-			1. Start with a polite greeting
-			2. Acknowledge the customer's issue
-			3. Provide a clear and helpful solution or next steps
-			4. Offer further assistance if needed
-			5. End with a professional sign-off
-
-			Email:
-			`
+			const prompt = `Generate a polite customer support email for: "${input}"
+			Include: 1. Greeting 2. Acknowledge issue 3. Solution/steps 4. Offer help 5. Professional sign-off
+			Email:`
 
 			const result = await hf.textGeneration({
-		  		model: 'gpt2-large', // Using a larger model for better results
+				model: 'gpt2-large',
 				inputs: prompt,
 				parameters: {
-					max_length: 350, // Increased length to allow for a more detailed response
-					num_return_sequences: 1,
-					temperature: 0.7, // Adjust temp for more creative responses
+					max_length: 350,
+					temperature: 0.7,
 					top_k: 50,
 					top_p: 0.95,
 				},
 			})
 		
-			// Basic post-processing
 			let processedResponse = result.generated_text.replace(prompt, '').trim()
 			if (!processedResponse.toLowerCase().startsWith('dear') && !processedResponse.toLowerCase().startsWith('hello')) {
 			  processedResponse = `Dear Valued Customer,\n\n${processedResponse}`
 			}
+			if (!processedResponse.toLowerCase().includes('sincerely') && !processedResponse.toLowerCase().includes('best regards')) {
+			  processedResponse += '\n\nBest regards,\nCustomer Support Team'
+			}
 		
 			setResponse(processedResponse)
-
 		} catch (error) {
 			console.error('Error generating response:', error)
 			setResponse('An error occurred while generating the response. Please try again.')
 		}
-		  setLoading(false)
-		}
+		setLoading(false)
+	}
 
 	return (
 		<main className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
