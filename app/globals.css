@@ -2,22 +2,56 @@
 
 /* Body Styles */
 body {
-  color: #2d3748; /* Use a slightly darker text color */
-  background-color: #f7fafc; /* Set a light background color */
+  color: #2d3748; 
+  background-color: #f7fafc;
 }
 
-/* Center the form container */
+/* Update the flex container styling */
 .flex {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* Changed from center to flex-start */
   min-height: 100vh;
+}
+
+/* Add some top padding to the main content */
+.max-w-3xl {
+  max-width: 48rem; /* 768px */
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 2rem; /* Top padding */
 }
 
 /* Form container styling */
 .bg-white {
   background-color: #ffffff;
 }
+
+/* Ensure consistent width for form elements */
+#emailForm input,
+#emailForm select,
+#emailForm textarea,
+#emailForm button {
+  width: 100%;
+  max-width: 728px;
+  box-sizing: border-box;
+}
+
+/* Generate email button */
+.generate-email-btn {
+  background: linear-gradient(90deg, #FF416C 0%, #FF4B2B 100%);
+  transition: opacity 0.3s ease;
+  border: none; /* Remove border */
+  font-size: 1.5rem; 
+  padding: 1.25rem 2rem;
+  cursor: pointer;
+  line-height: 1.65;
+}
+
+.generate-email-btn:hover {
+  opacity: 0.9;
+}
+
 
 .shadow-md, .shadow-lg {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -37,6 +71,13 @@ body {
 
 .max-w-3xl {
   max-width: 48rem; /* 768px */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Center the h1 text */
+.max-w-3xl h1 {
+  text-align: center;
 }
 
 .w-full {

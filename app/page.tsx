@@ -1,21 +1,21 @@
 "use client";
 
-import React, { useState } from 'react';
-import { HfInference } from '@huggingface/inference';
+import React, { useState } from "react";
+import { HfInference } from "@huggingface/inference";
 
 const hf = new HfInference(process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY);
 
 export default function CustomerSupportGenerator() {
-  const [customerName, setCustomerName] = useState('');
-  const [issue, setIssue] = useState('');
-  const [details, setDetails] = useState('');
-  const [generatedEmail, setGeneratedEmail] = useState('');
+  const [customerName, setCustomerName] = useState("");
+  const [issue, setIssue] = useState("");
+  const [details, setDetails] = useState("");
+  const [generatedEmail, setGeneratedEmail] = useState("");
 
   const handleGenerateEmail = async () => {
-    try {
-      // Determine the specific email template to use based on the issue type
-      const issueTemplates: { [key: string]: string } = {
-        technical: `Dear ${customerName},
+	try {
+	  // Determine the specific email template to use based on the issue type
+	  const issueTemplates: { [key: string]: string } = {
+		technical: `Dear ${customerName},
 
 Thank you for contacting us regarding the technical issue you're facing. We understand how frustrating it can be, and we apologize for any inconvenience this may have caused.
 
@@ -28,7 +28,7 @@ Thank you for your patience and understanding. We will keep you updated on our p
 Best regards,
 Customer Support Team`,
 
-        billing: `Dear ${customerName},
+		billing: `Dear ${customerName},
 
 Thank you for reaching out regarding your billing inquiry. We understand the importance of this matter and will review your request as soon as possible.
 
@@ -41,7 +41,7 @@ Please allow us 5-10 business days to process your request. We will ensure that 
 Best regards,
 Customer Support Team`,
 
-        account: `Dear ${customerName},
+		account: `Dear ${customerName},
 
 Thank you for contacting us about your account management needs. We are here to help you with any issues you might have.
 
@@ -58,7 +58,7 @@ Once we have this information, we can proceed with your request.
 Best regards,
 Customer Support Team`,
 
-        product: `Dear ${customerName},
+		product: `Dear ${customerName},
 
 Thank you for your interest in our products. We are always eager to assist with any questions or information you may need.
 
@@ -70,74 +70,107 @@ Please provide any additional information that might help us assist you better. 
 
 Best regards,
 Customer Support Team`,
-      };
+	  };
 
-      // Use the corresponding template based on the selected issue type
-      const emailTemplate = issueTemplates[issue] || `Dear ${customerName},
+	  // Use the corresponding template based on the selected issue type
+	  const emailTemplate =
+		issueTemplates[issue] ||
+		`Dear ${customerName},
 
 Thank you for reaching out to us. We will review your inquiry and get back to you as soon as possible.
 
 Best regards,
 Customer Support Team`;
 
-      // Set the generated email
-      setGeneratedEmail(emailTemplate);
-
-    } catch (error) {
-      console.error('Error generating email:', error);
-    }
+	  // Set the generated email
+	  setGeneratedEmail(emailTemplate);
+	} catch (error) {
+	  console.error("Error generating email:", error);
+	}
   };
 
   return (
-    <div className="flex justify-center items-start min-h-screen bg-gray-100 p-4">
-      <div className="w-full max-w-3xl">
-        <h1 className="text-center text-3xl font-bold text-gray-800 mb-8 w-full">Customer Support Email Generator</h1>
-        <form id="emailForm" className="bg-white p-8 rounded-lg shadow-lg" onSubmit={(e) => { e.preventDefault(); handleGenerateEmail(); }}>
-          <div className="max-w-[728px] mx-auto">
-            <label htmlFor="customerName" className="block mb-2 font-bold text-gray-700">Customer Name:</label>
-            <input
-              type="text"
-              id="customerName"
-              className="w-full p-2 mb-4 border border-gray-300 rounded-md"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-              required
-            />
-            
-            <label htmlFor="issueType" className="block mb-2 font-bold text-gray-700">Issue Type:</label>
-            <select
-              id="issueType"
-              className="w-full p-2 mb-4 border border-gray-300 rounded-md"
-              value={issue}
-              onChange={(e) => setIssue(e.target.value)}
-              required
-            >
-              <option value="">Select an issue</option>
-              <option value="technical">Technical Problem</option>
-              <option value="billing">Billing Inquiry</option>
-              <option value="account">Account Management</option>
-              <option value="product">Product Information</option>
-            </select>
-            
-            <label htmlFor="details" className="block mb-2 font-bold text-gray-700">Additional Details:</label>
-            <textarea
-              id="details"
-              className="w-full p-2 mb-4 border border-gray-300 rounded-md"
-              rows={4}
-              value={details}
-              onChange={(e) => setDetails(e.target.value)}
-            />
-            
-            <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors text-[1.2em]">Generate Email</button>
-          </div>
-        </form>
-        
-        {generatedEmail && (
-          <div id="generatedEmail" className="bg-white border border-gray-300 rounded-md p-4 mt-6 whitespace-pre-wrap">
-            {generatedEmail}
-          </div>
-        )}
-      </div>
-    </div>
+	<div className="flex bg-gray-100 p-4">
+	  <div className="w-full max-w-3xl">
+		<h1 className="text-center text-3xl font-bold text-gray-800 mb-8 w-full email-generator-title">
+		  Customer Support Email Generator
+		</h1>
+		<form
+		  id="emailForm"
+		  className="bg-white p-8 rounded-lg shadow-lg"
+		  onSubmit={(e) => {
+			e.preventDefault();
+			handleGenerateEmail();
+		  }}
+		>
+		  <div className="max-w-[728px] mx-auto">
+			<label
+			  htmlFor="customerName"
+			  className="block mb-2 font-bold text-gray-700"
+			>
+			  Customer Name:
+			</label>
+			<input
+			  type="text"
+			  id="customerName"
+			  className="form-element-width p-2 mb-4 border border-gray-300 rounded-md"
+			  value={customerName}
+			  onChange={(e) => setCustomerName(e.target.value)}
+			  required
+			/>
+
+			<label
+			  htmlFor="issueType"
+			  className="block mb-2 font-bold text-gray-700"
+			>
+			  Issue Type:
+			</label>
+			<select
+			  id="issueType"
+			  className="form-element-width p-2 mb-4 border border-gray-300 rounded-md"
+			  value={issue}
+			  onChange={(e) => setIssue(e.target.value)}
+			  required
+			>
+			  <option value="">Select an issue</option>
+			  <option value="technical">Technical Problem</option>
+			  <option value="billing">Billing Inquiry</option>
+			  <option value="account">Account Management</option>
+			  <option value="product">Product Information</option>
+			</select>
+
+			<label
+			  htmlFor="details"
+			  className="block mb-2 font-bold text-gray-700"
+			>
+			  Additional Details:
+			</label>
+			<textarea
+			  id="details"
+			  className="form-element-width p-2 mb-4 border border-gray-300 rounded-md"
+			  rows={4}
+			  value={details}
+			  onChange={(e) => setDetails(e.target.value)}
+			/>
+
+			<button
+			  type="submit"
+			  className="w-full generate-email-btn rounded-lg text-white py-3 px-4 rounded-full hover:opacity-90 transition-opacity text-2xl font-bold"
+			>
+			  Generate Email
+			</button>
+		  </div>
+		</form>
+
+		{generatedEmail && (
+		  <div
+			id="generatedEmail"
+			className="bg-white border border-gray-300 rounded-md p-4 mt-6 whitespace-pre-wrap"
+		  >
+			{generatedEmail}
+		  </div>
+		)}
+	  </div>
+	</div>
   );
 }
